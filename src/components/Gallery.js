@@ -1,38 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-
-const imgs = [
-  {
-    src: "https://scontent-amt2-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/c0.134.1080.1080/18013749_1124931204320194_1175560517742231552_n.jpg",
-    alt: "foo"
-  },
-  {
-    src: "https://scontent-amt2-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/17437938_1868263766729734_4720341965097402368_n.jpg"
-  },
-  {
-    src: "https://scontent-ams3-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/c183.0.713.713/12716736_1078220098888162_828171429_n.jpg"
-  },
-  {
-    src: "https://scontent-ams3-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/c0.100.800.800/10535136_1031595976908122_1978086507_n.jpg",
-    alt: "foo"
-  },
-  {
-    src: "https://scontent-ams3-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/11887231_1648324882082177_1714767439_n.jpg"
-  },
-  {
-    src: "https://scontent-ams3-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/11887280_903353776426849_156462576_n.jpg"
-  },
-  {
-    src: "https://scontent-ams3-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/11324488_940740032653270_1193092604_n.jpg",
-    alt: "foo"
-  },
-  {
-    src: "https://scontent-amt2-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/17437938_1868263766729734_4720341965097402368_n.jpg"
-  },
-  {
-    src: "https://scontent-ams3-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/16110572_367124283669333_831552264605794304_n.jpg"
-  }
-]
+import FontAwesome from 'react-fontawesome';
+import imgs from './imgs';
 
 const GalleryItem = styled.li`
   width: 100%;
@@ -60,22 +29,146 @@ const GalleryItem = styled.li`
   }
 
 `
+const Overlay = styled.div`
+  background-color: rgba(5,5,5, 0.8);
+  padding: 0;
+  overflow: auto;
+  position: fixed;
+  width: 100%;
+  z-index: 100000;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  text-align: center;
+`
 
-const Gallery = () => {
+const Wrapper = styled.div`
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 960px;
+  color: white;
+`
+const Table = styled.div`
+  display: table;
+  width: 100%;
+`
+const Row = styled.div`
+  display: table-row;
+`
+const Cell = styled.div`
+  display: table-cell;
+`
 
-  return (
-    <div className="Gallery">
-      <ul>
-        {imgs.map((img, i) => {
-          return (
-            <GalleryItem key={i}>
-              <img src={img.src} alt={img.alt} width="100%"/>
-            </GalleryItem>
-          )
-        })}
-      </ul>
-    </div>
-  )
+const Btn = styled.span`
+
+`
+const CloseBtn = Btn.extend`
+  text-align: right;
+  display: block;
+  padding: 2em 0
+`
+
+
+
+class Gallery extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      imgs: imgs,
+      imgIndex: 0,
+      lightboxIsActive: false
+    }
+    this.next = this.next.bind(this);
+    this.prev = this.prev.bind(this);
+    this.open = this.open.bind(this);
+    this.close = this.close.bind(this);
+  }
+
+  next() {
+    if (this.state.lightboxIsActive) {
+      this.setState(prevState => {
+        if (prevState.imgIndex < prevState.imgs.length - 1) {
+          console.log('next');
+          return {
+            imgIndex: prevState.imgIndex + 1
+          }
+        }
+      })
+    }
+  }
+
+  prev() {
+    if (this.state.lightboxIsActive) {
+      this.setState(prevState => {
+        if (prevState.imgIndex > 0) {
+          return {
+            imgIndex: prevState.imgIndex - 1
+          }
+        }
+      })
+    }
+  }
+
+  open(index) {
+    this.setState(prevState => {
+      return {
+        lightboxIsActive: true,
+        imgIndex: index
+      }
+    })
+  }
+
+  close() {
+    this.setState(prevState => {
+      return { lightboxIsActive: false}
+    })
+  }
+
+  render() {
+    return (
+      <div className="Gallery">
+        <ul>
+          {imgs.map((img, i) => {
+            return (
+              <GalleryItem key={i} onClick={() => {
+                this.open(i);
+              }}>
+                <img src={img.src} alt={img.alt} width="100%"/>
+              </GalleryItem>
+            )
+          })}
+          {
+            this.state.lightboxIsActive?
+              <Overlay>
+                <Wrapper>
+                  <CloseBtn onClick={this.close}>
+                    <FontAwesome name="times" size="2x"/>
+                  </CloseBtn>
+                  <Table>
+                    <Row>
+                      <Cell>
+                        <Btn onClick={this.prev}>
+                          <FontAwesome name="chevron-left" size="2x"/>
+                        </Btn>
+                      </Cell>
+                      <Cell>
+                        <img src={this.state.imgs[this.state.imgIndex].src} alt=""/>
+                      </Cell>
+                      <Cell>
+                        <Btn onClick={this.next}>
+                          <FontAwesome name="chevron-right" size="2x"/>
+                        </Btn>
+                      </Cell>
+                    </Row>
+                  </Table>
+                </Wrapper>
+              </Overlay> : null
+          }
+        </ul>
+      </div>
+    )
+  }
 
 }
 
