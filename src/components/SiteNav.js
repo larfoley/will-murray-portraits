@@ -7,29 +7,31 @@ const activeStyle = {
 }
 
 const NavWrapper = styled.nav`
-  @media (min-width: 600px) {
-    padding: 1em 0;
-  }
-  padding: 0;
   background-color: white;
-  overflow: auto;
+  padding: 0;
+  height: 60px;
+  position: fixed;
+  width: 100%;
+  border-bottom: 1px solid #f5f5f5;
 `
 const NavList = styled.ul`
-  text-align: center;
   margin: 0;
-  float: left;
+  @media (max-width: 600px) {
+    text-align: center;
+  }
 `
 const NavItem = styled.li`
   display: inline-block;
+  vertical-align: middle;
   @media (max-width: 600px) {
-    width: 33.333%;
+
   }
 `
 const NavLink = styled(Link)`
   color: black;
   text-align: center;
+  line-height: 60px;
   text-decoration: none;
-  padding: 1em .25em;
   border-bottom: 0 solid;
   min-width: 90px;
   display: inline-block;

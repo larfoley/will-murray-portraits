@@ -61,7 +61,8 @@ const Cell = styled.div`
 `
 
 const Btn = styled.span`
-
+  padding: 1em;
+  display: inline-block;
 `
 const CloseBtn = Btn.extend`
   text-align: right;

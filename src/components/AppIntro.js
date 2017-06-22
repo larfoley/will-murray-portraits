@@ -6,8 +6,12 @@ import Container from './Container';
 import config from './config';
 
 const Wrapper = styled.div`
+  @media (max-width: 600px) {
+    padding: 4em 0;
+    padding-top: calc(4em + 60px);
+  }
   padding: 8em 0;
-  background-color: white;
+  padding-top: calc(8em + 60px);
 `
 const Title = styled.h1`
   font-size: 3.5em;
@@ -36,7 +40,6 @@ const SocialIcon = styled(FontAwesome)`
     color: black;
   }
 `
-
 const AppIntro = () => {
   return (
     <Wrapper>

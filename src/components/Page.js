@@ -10,7 +10,7 @@ const PageTitle = styled.h1`
   &::after {
     content: "";
     display: block;
-    width: 70px;
+    width: 60px;
     height: 3px;
     background-color: black;
     margin-left: auto;
